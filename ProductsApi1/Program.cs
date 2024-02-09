@@ -1,5 +1,6 @@
 using MediatR;
 using ProductsApi1.Models;
+using ProductsApi1.RabbitMQ;
 using ProductsApi1.Repositories;
 using System.Reflection;
 
@@ -12,6 +13,7 @@ builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("Mo
 // Add services to the container.
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IRabbitMQProducer, RabbitMQProducer>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -49,5 +49,11 @@ namespace ProductsApi1.Controllers
         {
             return await mediator.Send(new DeleteProductCommand() { Id = id });
         }
+
+        [HttpDelete]
+        public async Task<string> DeleteAllProducts()
+        {
+            return await mediator.Send(new DeleteAllProductsCommand());
+        }
     }
 }
