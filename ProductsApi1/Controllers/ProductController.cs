@@ -54,10 +54,10 @@ namespace ProductsApi1.Controllers
         }
 
         [HttpGet("requestDeleteAllProducts")]
-        public async Task<string> RequestDeleteAllProducts()
+        public async Task<bool> RequestDeleteAllProducts()
         {
             await Task.Run(() => _rabitMQProducer.SendProductMessage("DeleteProducts"));
-            return "Los productos serán borrados dentro de 2 minutos";
+            return true;
         }
 
         [HttpDelete("deleteAllProducts")]
