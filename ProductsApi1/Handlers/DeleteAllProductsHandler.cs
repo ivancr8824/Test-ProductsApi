@@ -1,22 +1,21 @@
 ﻿using MediatR;
 using ProductsApi1.Commands;
-using ProductsApi1.RabbitMQ;
+using ProductsApi1.Repositories;
 
 namespace ProductsApi1.Handlers
 {
-    public class DeleteAllProductsHandler: IRequestHandler<DeleteAllProductsCommand, string>
+    public class DeleteAllProductsHandler: IRequestHandler<DeleteAllProductsCommand, bool>
     {
-        private readonly IRabbitMQProducer _rabitMQProducer;
+        private readonly IProductRepository _productRepository;
 
-        public DeleteAllProductsHandler(IRabbitMQProducer rabitMQProducer)
+        public DeleteAllProductsHandler(IProductRepository productRepository)
         {
-            _rabitMQProducer = rabitMQProducer;
+            _productRepository = productRepository;
         }
 
-        public async Task<string> Handle(DeleteAllProductsCommand query, CancellationToken cancellationToken)
+        public async Task<bool> Handle(DeleteAllProductsCommand query, CancellationToken cancellationToken)
         {
-            _rabitMQProducer.SendProductMessage("DeleteProducts");
-            return await Task.Run(() => "Los productos serán borrados dentro de 2 min");
+            return await _productRepository.DeleteAllProductAsync();
         }
     }
 }

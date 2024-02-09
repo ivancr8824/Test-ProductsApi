@@ -43,5 +43,11 @@ namespace ProductsApi1.Repositories
             await _productCollection.ReplaceOneAsync(x => x.Id == id, product);
             return true;
         }
+
+        public async Task<bool> DeleteAllProductAsync()
+        {
+            await _productCollection.DeleteManyAsync(_ => true);
+            return true;
+        }
     }
 }

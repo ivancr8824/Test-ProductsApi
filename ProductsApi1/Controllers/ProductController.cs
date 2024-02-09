@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProductsApi1.Commands;
 using ProductsApi1.Models;
 using ProductsApi1.Queries;
+using ProductsApi1.RabbitMQ;
 
 namespace ProductsApi1.Controllers
 {
@@ -11,9 +12,11 @@ namespace ProductsApi1.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IMediator mediator;
+        private readonly IRabbitMQProducer _rabitMQProducer;
 
-        public ProductController(IMediator mediator)
+        public ProductController(IMediator mediator, IRabbitMQProducer rabitMQProducer)
         {
+            _rabitMQProducer = rabitMQProducer;
             this.mediator = mediator;
         }
 
@@ -50,8 +53,15 @@ namespace ProductsApi1.Controllers
             return await mediator.Send(new DeleteProductCommand() { Id = id });
         }
 
-        [HttpDelete]
-        public async Task<string> DeleteAllProducts()
+        [HttpGet("requestDeleteAllProducts")]
+        public async Task<string> RequestDeleteAllProducts()
+        {
+            await Task.Run(() => _rabitMQProducer.SendProductMessage("DeleteProducts"));
+            return "Los productos serán borrados dentro de 2 minutos";
+        }
+
+        [HttpDelete("deleteAllProducts")]
+        public async Task<bool> DeleteAllProducts()
         {
             return await mediator.Send(new DeleteAllProductsCommand());
         }

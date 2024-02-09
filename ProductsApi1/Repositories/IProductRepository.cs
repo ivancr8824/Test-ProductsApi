@@ -9,5 +9,6 @@ namespace ProductsApi1.Repositories
         public Task<Product> AddProductAsync(Product product);
         public Task<bool> UpdateProductAsync(string id, Product product);
         public Task<bool> DeleteProductAsync(string id);
+        public Task<bool> DeleteAllProductAsync();
     }
 }
